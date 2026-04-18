@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Return Book — LibraryMS{% endblock %}
+
+{% block content %}
+<h2 class="page-title">📥 Process Book Return</h2>
+
+<div class="detail-card">
+
+    <!-- Book & User Info -->
+    <div class="detail-row">
+        <span class="label">User Name</span>
+        <span class="value">{{ record.user_name }}</span>
+    </div>
+    <div class="detail-row">
+        <span class="label">Book Title</span>
+        <span class="value">{{ record.title }}</span>
+    </div>
+    <div class="detail-row">
+        <span class="label">Author</span>
+        <span class="value">{{ record.author }}</span>
+    </div>
+    <div class="detail-row">
+        <span class="label">Issue Date</span>
+        <span class="value">{{ record.issue_date }}</span>
+    </div>
+    <div class="detail-row">
+        <span class="label">Due Date</span>
+        <span class="value">{{ record.due_date }}</span>
+    </div>
+    <div class="detail-row">
+        <span class="label">Return Date (Today)</span>
+        <span class="value">{{ today }}</span>
+    </div>
+    <div class="detail-row">
+        <span class="label">Days Issued</span>
+        <span class="value">{{ days_issued }} day(s)</span>
+    </div>
+
+    <!-- Fine Calculation -->
+    {% if fine > 0 %}
+    <div class="fine-highlight">
+        <div class="fine-amount">₹{{ fine }}</div>
+        <div class="fine-label">
+            Fine (₹2/day × {{ days_issued - 7 }} extra day(s) beyond due date)
+        </div>
+    </div>
+    {% else %}
+    <div style="background:#d4edda; border-radius: var(--radius); padding: 14px 20px;
+                text-align:center; margin: 20px 0; color: #155724; font-weight:600;">
+        ✅ No fine — returned within due date!
+    </div>
+    {% endif %}
+
+    <!-- Confirm Return Form -->
+    <form method="POST" action="{{ url_for('return_book', issue_id=record.id) }}">
+        <div class="form-submit" style="margin-top: 10px;">
+            <button type="submit" class="btn btn-success">✔ Confirm Return</button>
+            <a href="{{ url_for('admin_issued') }}" class="btn btn-accent">Cancel</a>
+        </div>
+    </form>
+
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Users — LibraryMS{% endblock %}
+
+{% block content %}
+<div class="section-header">
+    <h2 class="page-title" style="margin-bottom:0;">👥 Registered Users</h2>
+    <a href="{{ url_for('add_user') }}" class="btn btn-primary">+ Add New User</a>
+</div>
+
+{% if users %}
+<div class="table-wrapper">
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Photo</th>
+                <th>Name</th>
+                <th>Phone (Login ID)</th>
+                <th>Password</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>
+                    <img class="user-photo"
+                         src="{{ url_for('static', filename='uploads/' + user.photo) }}"
+                         alt="{{ user.name }}"
+                         onerror="this.src='https://ui-avatars.com/api/?name={{ user.name }}&background=2c4a3e&color=fff&size=46'">
+                </td>
+                <td><strong>{{ user.name }}</strong></td>
+                <td>{{ user.phone }}</td>
+                <td><span style="color:var(--text-muted);">{{ user.password }}</span></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+    <p style="color: var(--text-muted); margin-top: 20px;">
+        No users found. <a href="{{ url_for('add_user') }}">Create the first user →</a>
+    </p>
+{% endif %}
+
+{% endblock %}

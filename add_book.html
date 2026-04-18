@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Add Book — LibraryMS{% endblock %}
+
+{% block content %}
+<h2 class="page-title">➕ Add New Book</h2>
+
+<div class="form-card">
+    <form method="POST" action="{{ url_for('add_book') }}">
+
+        <div class="form-group">
+            <label for="title">Book Title *</label>
+            <input type="text" id="title" name="title" placeholder="e.g. Introduction to Python"
+                   required autofocus>
+        </div>
+
+        <div class="form-group">
+            <label for="author">Author Name *</label>
+            <input type="text" id="author" name="author" placeholder="e.g. Mark Lutz" required>
+        </div>
+
+        <div class="form-group">
+            <label for="price">Price (₹) *</label>
+            <input type="number" id="price" name="price" placeholder="e.g. 350"
+                   min="0" step="0.01" required>
+        </div>
+
+        <div class="form-group">
+            <label for="quantity">Quantity *</label>
+            <input type="number" id="quantity" name="quantity" placeholder="e.g. 5"
+                   min="1" required>
+        </div>
+
+        <div class="form-submit">
+            <button type="submit" class="btn btn-primary">Add Book</button>
+            <a href="{{ url_for('admin_books') }}" class="btn btn-accent">Cancel</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

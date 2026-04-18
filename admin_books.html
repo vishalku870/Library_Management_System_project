@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Books — LibraryMS{% endblock %}
+
+{% block content %}
+<div class="section-header">
+    <h2 class="page-title" style="margin-bottom:0;">📖 All Books</h2>
+    <a href="{{ url_for('add_book') }}" class="btn btn-primary">+ Add New Book</a>
+</div>
+
+{% if books %}
+<div class="table-wrapper">
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Price (₹)</th>
+                <th>Total Qty</th>
+                <th>Available</th>
+                <th>Issued</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in books %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td><strong>{{ book.title }}</strong></td>
+                <td>{{ book.author }}</td>
+                <td>{{ "%.2f"|format(book.price) }}</td>
+                <td>{{ book.quantity }}</td>
+                <td>
+                    {% if book.available == 0 %}
+                        <span class="badge badge-low">0</span>
+                    {% else %}
+                        {{ book.available }}
+                    {% endif %}
+                </td>
+                <td>{{ book.quantity - book.available }}</td>
+                <td>
+                    <a href="{{ url_for('delete_book', book_id=book.id) }}"
+                       class="btn btn-sm btn-danger"
+                       onclick="return confirm('Delete book: {{ book.title }}?')">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+    <p style="color: var(--text-muted); margin-top: 20px;">
+        No books found. <a href="{{ url_for('add_book') }}">Add the first book →</a>
+    </p>
+{% endif %}
+
+{% endblock %}

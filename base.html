@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Library Management System{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<!-- ── Navigation Bar ── -->
+<nav>
+    <div class="logo">📚 <span>Library</span>MS</div>
+
+    <div class="nav-links">
+        {% if session.get('role') == 'admin' %}
+            <a href="{{ url_for('admin_dashboard') }}"
+               class="{{ 'active' if request.endpoint == 'admin_dashboard' }}">Dashboard</a>
+            <a href="{{ url_for('admin_books') }}"
+               class="{{ 'active' if request.endpoint in ['admin_books','add_book'] }}">Books</a>
+            <a href="{{ url_for('admin_users') }}"
+               class="{{ 'active' if request.endpoint in ['admin_users','add_user'] }}">Users</a>
+            <a href="{{ url_for('issue_book') }}"
+               class="{{ 'active' if request.endpoint == 'issue_book' }}">Issue Book</a>
+            <a href="{{ url_for('admin_issued') }}"
+               class="{{ 'active' if request.endpoint == 'admin_issued' }}">Issued Books</a>
+        {% else %}
+            <a href="{{ url_for('user_dashboard') }}"
+               class="{{ 'active' if request.endpoint == 'user_dashboard' }}">My Books</a>
+        {% endif %}
+
+        <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+    </div>
+</nav>
+
+<!-- ── Main Container ── -->
+<div class="container">
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Page Content -->
+    {% block content %}{% endblock %}
+
+</div>
+
+</body>
+</html>

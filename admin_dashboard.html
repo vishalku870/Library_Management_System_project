@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard — LibraryMS{% endblock %}
+
+{% block content %}
+<h2 class="page-title">📊 Dashboard</h2>
+
+<!-- ── Summary Statistics ── -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-number">{{ total_books }}</div>
+        <div class="stat-label">Total Books</div>
+    </div>
+    <div class="stat-card accent-border">
+        <div class="stat-number">{{ total_issued }}</div>
+        <div class="stat-label">Currently Issued</div>
+    </div>
+    <div class="stat-card danger-border">
+        <div class="stat-number">{{ total_users }}</div>
+        <div class="stat-label">Registered Users</div>
+    </div>
+</div>
+
+<!-- ── Quick Actions ── -->
+<div class="section-header">
+    <h3 style="font-size:1.2rem;">Quick Actions</h3>
+</div>
+<div class="actions" style="margin-bottom: 36px;">
+    <a href="{{ url_for('add_book') }}"  class="btn btn-primary">+ Add Book</a>
+    <a href="{{ url_for('add_user') }}"  class="btn btn-accent">+ Add User</a>
+    <a href="{{ url_for('issue_book') }}" class="btn btn-success">Issue Book</a>
+    <a href="{{ url_for('admin_issued') }}" class="btn btn-danger">View Issued</a>
+</div>
+
+<!-- ── Book Stock Overview ── -->
+<div class="section-header">
+    <h3 style="font-size:1.2rem;">Book Stock Overview</h3>
+    <a href="{{ url_for('admin_books') }}" class="btn btn-sm btn-primary">View All →</a>
+</div>
+
+{% if books %}
+<div class="table-wrapper">
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Total Qty</th>
+                <th>Available</th>
+                <th>Issued</th>
+                <th>Price (₹)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in books %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td><strong>{{ book.title }}</strong></td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.quantity }}</td>
+                <td>
+                    {% if book.available == 0 %}
+                        <span class="badge badge-low">0 — Out of Stock</span>
+                    {% else %}
+                        {{ book.available }}
+                    {% endif %}
+                </td>
+                <td>{{ book.quantity - book.available }}</td>
+                <td>{{ "%.2f"|format(book.price) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+    <p style="color: var(--text-muted);">No books in library yet. <a href="{{ url_for('add_book') }}">Add a book →</a></p>
+{% endif %}
+
+{% endblock %}

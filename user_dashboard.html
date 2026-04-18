@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}My Books — LibraryMS{% endblock %}
+
+{% block content %}
+<h2 class="page-title">
+    📚 Welcome, {{ session.user_name }}
+</h2>
+
+<p style="color: var(--text-muted); margin-bottom: 28px;">
+    Here are all books issued to you. Contact the librarian to issue or return books.
+</p>
+
+{% if records %}
+<div class="table-wrapper">
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Book Title</th>
+                <th>Author</th>
+                <th>Issue Date</th>
+                <th>Due Date</th>
+                <th>Return Date</th>
+                <th>Fine (₹)</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in records %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td><strong>{{ r.title }}</strong></td>
+                <td>{{ r.author }}</td>
+                <td>{{ r.issue_date }}</td>
+                <td>{{ r.due_date }}</td>
+                <td>{{ r.return_date if r.return_date else '—' }}</td>
+                <td>
+                    {% if r.live_fine > 0 %}
+                        <span style="color:var(--danger); font-weight:700;">₹{{ r.live_fine }}</span>
+                    {% else %}
+                        ₹0
+                    {% endif %}
+                </td>
+                <td>
+                    {% if r.status == 'issued' %}
+                        <span class="badge badge-issued">Issued</span>
+                    {% else %}
+                        <span class="badge badge-returned">Returned</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Active issues reminder -->
+{% set active = records | selectattr('status', 'equalto', 'issued') | list %}
+{% if active %}
+<div style="margin-top: 20px; padding: 14px 18px;
+            background: #fff3cd; border-left: 4px solid var(--accent);
+            border-radius: var(--radius); font-size: 0.92rem;">
+    ⚠️ You have <strong>{{ active|length }}</strong> book(s) currently issued.
+    Please return them on time to avoid fines (₹2/day after due date).
+</div>
+{% endif %}
+
+{% else %}
+<div style="text-align:center; padding: 60px 20px; color: var(--text-muted);">
+    <div style="font-size: 3rem; margin-bottom: 12px;">📭</div>
+    <p>No books issued to you yet.</p>
+    <p style="font-size:0.88rem; margin-top: 6px;">Contact the librarian to borrow a book.</p>
+</div>
+{% endif %}
+
+{% endblock %}
