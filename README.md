@@ -436,7 +436,7 @@ It reflects strong understanding of full-stack web development using Python Flas
 
 ## Vishal Kumar
 
-📧 Email: vishal2123@gmail.com  
+📧 Email: Vishalku870@gmail.com  
 
 For suggestions, improvements, collaboration, or project-related queries, feel free to reach out anytime.
 
